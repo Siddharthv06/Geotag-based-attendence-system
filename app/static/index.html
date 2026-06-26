@@ -22,18 +22,18 @@
       --font-body: 'Inter', sans-serif;
       
       /* Light Mode Palette */
-      --bg-app: #f8fafc;
+      --bg-app: #f2f7f5;
       --bg-surface: #ffffff;
       --bg-surface-glass: rgba(255, 255, 255, 0.75);
-      --border-color: #e2e8f0;
-      --border-glass: rgba(226, 232, 240, 0.8);
-      --text-main: #0f172a;
-      --text-muted: #64748b;
+      --border-color: #cbdad5;
+      --border-glass: rgba(203, 218, 213, 0.8);
+      --text-main: #0e2a22;
+      --text-muted: #4e6d63;
       
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --primary-light: #e0e7ff;
-      --primary-glow: rgba(79, 70, 229, 0.15);
+      --primary: #059669;
+      --primary-hover: #047857;
+      --primary-light: #e6f4ea;
+      --primary-glow: rgba(5, 150, 105, 0.15);
       
       --success: #10b981;
       --success-light: #d1fae5;
@@ -58,18 +58,18 @@
 
     [data-theme="dark"] {
       /* Dark Mode Palette */
-      --bg-app: #080c14;
-      --bg-surface: #111827;
-      --bg-surface-glass: rgba(17, 24, 39, 0.7);
-      --border-color: #1f2937;
-      --border-glass: rgba(31, 41, 55, 0.6);
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --bg-app: #08100e;
+      --bg-surface: #0e1a17;
+      --bg-surface-glass: rgba(14, 26, 23, 0.7);
+      --border-color: #1a302a;
+      --border-glass: rgba(26, 48, 42, 0.6);
+      --text-main: #eef7f4;
+      --text-muted: #85a299;
       
-      --primary: #6366f1;
-      --primary-hover: #4f46e5;
-      --primary-light: rgba(99, 102, 241, 0.15);
-      --primary-glow: rgba(99, 102, 241, 0.3);
+      --primary: #10b981;
+      --primary-hover: #059669;
+      --primary-light: rgba(16, 185, 129, 0.15);
+      --primary-glow: rgba(16, 185, 129, 0.3);
       
       --success: #10b981;
       --success-light: rgba(16, 185, 129, 0.15);
@@ -81,11 +81,11 @@
       --warning: #fbbf24;
       --warning-light: rgba(251, 191, 36, 0.15);
       
-      --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.3);
-      --shadow-md: 0 8px 30px -4px rgba(0, 0, 0, 0.4), 0 4px 12px -2px rgba(0, 0, 0, 0.3);
-      --shadow-lg: 0 20px 40px -4px rgba(0, 0, 0, 0.5), 0 8px 16px -4px rgba(0, 0, 0, 0.4);
+      --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 8px 30px -4px rgba(0, 0, 0, 0.55), 0 4px 12px -2px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 20px 40px -4px rgba(0, 0, 0, 0.75), 0 8px 16px -4px rgba(0, 0, 0, 0.65);
       
-      --map-tile-filter: invert(90%) hue-rotate(180deg) brightness(95%) contrast(90%);
+      --map-tile-filter: invert(90%) hue-rotate(135deg) brightness(85%) contrast(90%);
     }
 
     /* ────────────────────────────────────────────────────────
@@ -153,7 +153,7 @@
     .logo-icon {
       width: 32px;
       height: 32px;
-      background: linear-gradient(135deg, var(--primary), #a855f7);
+      background: linear-gradient(135deg, var(--primary), #14b8a6);
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -1315,8 +1315,8 @@
       } else {
         currentFormCircle = L.circle([lat, lng], {
           radius: radius,
-          color: '#6366f1',
-          fillColor: '#6366f1',
+          color: '#10b981',
+          fillColor: '#10b981',
           fillOpacity: 0.2
         }).addTo(sitesMap);
       }
@@ -1460,8 +1460,8 @@
               // Add Circle Geofence Range
               L.circle([s.latitude, s.longitude], {
                 radius: s.radius_meters,
-                color: '#6366f1',
-                fillColor: '#6366f1',
+                color: '#10b981',
+                fillColor: '#10b981',
                 fillOpacity: 0.15,
                 weight: 1.5
               }).addTo(sitesCircleGroup);
@@ -1779,8 +1779,8 @@
 
       checkinSiteCircle = L.circle([site.latitude, site.longitude], {
         radius: site.radius_meters,
-        color: '#6366f1',
-        fillColor: '#6366f1',
+        color: '#10b981',
+        fillColor: '#10b981',
         fillOpacity: 0.15
       }).addTo(checkinMap);
 
