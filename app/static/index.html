@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site Management</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f5;color:#333}
+.header{background:#1a73e8;color:#fff;padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:20px}
+.header span{font-size:13px;opacity:.8}
+.container{max-width:1100px;margin:0 auto;padding:20px}
+.tabs{display:flex;gap:4px;margin-bottom:20px;flex-wrap:wrap}
+.tab{padding:10px 20px;border:none;background:#fff;cursor:pointer;border-radius:8px 8px 0 0;font-size:14px;font-weight:500;color:#666;transition:.2s}
+.tab.active{background:#1a73e8;color:#fff}
+.panel{display:none;background:#fff;border-radius:0 8px 8px 8px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.panel.active{display:block}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:16px}
+.card{background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:16px;transition:.2s}
+.card:hover{box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.card h3{font-size:16px;margin-bottom:8px;color:#1a73e8}
+.card p{font-size:13px;color:#666;margin-bottom:4px}
+.card .badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600;margin-top:6px}
+.badge-admin{background:#e8f0fe;color:#1a73e8}
+.badge-manager{background:#fef7e0;color:#e8a000}
+.badge-member{background:#e6f4ea;color:#137333}
+.btn{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500;transition:.2s}
+.btn-primary{background:#1a73e8;color:#fff}
+.btn-primary:hover{background:#1557b0}
+.btn-danger{background:#ea4335;color:#fff}
+.btn-danger:hover{background:#c5221f}
+.btn-success{background:#137333;color:#fff}
+.btn-success:hover{background:#0d5c29}
+.btn-sm{padding:5px 12px;font-size:12px}
+.btn-group{display:flex;gap:8px;margin-top:12px}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:13px;font-weight:500;margin-bottom:4px;color:#555}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:14px}
+.form-group input:focus{outline:none;border-color:#1a73e8}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-section{background:#f8f9fa;border-radius:8px;padding:20px;margin-bottom:20px}
+.form-section h3{font-size:15px;margin-bottom:14px;color:#333}
+.section-title{font-size:18px;font-weight:600;margin-bottom:4px}
+.section-desc{font-size:13px;color:#888;margin-bottom:16px}
+.member-chip{display:inline-flex;align-items:center;gap:6px;background:#e8f0fe;padding:6px 12px;border-radius:20px;font-size:13px;margin:4px}
+.member-chip button{background:none;border:none;color:#ea4335;cursor:pointer;font-size:16px;font-weight:700}
+.empty{text-align:center;padding:40px;color:#999;font-size:14px}
+.toast{position:fixed;top:20px;right:20px;padding:12px 20px;border-radius:8px;color:#fff;font-size:14px;z-index:999;animation:slideIn .3s}
+.toast-success{background:#137333}
+.toast-error{background:#ea4335}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+.checkin-result{margin-top:16px;padding:16px;border-radius:8px;text-align:center}
+.checkin-ok{background:#e6f4ea;border:2px solid #137333}
+.checkin-fail{background:#fce8e6;border:2px solid #ea4335}
+.checkin-result h3{font-size:20px;margin-bottom:8px}
+.checkin-result p{font-size:14px;color:#555}
+.site-detail-overlay{position:fixed;top:0;right:0;width:450px;height:100%;background:#fff;box-shadow:-4px 0 20px rgba(0,0,0,.15);z-index:100;overflow-y:auto;padding:24px;transition:.3s}
+.site-detail-overlay .close-btn{position:absolute;top:12px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:#666}
+.lock-btn{padding:6px 14px;border:2px solid #1a73e8;background:#fff;color:#1a73e8;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600}
+.lock-btn:hover{background:#e8f0fe}
+.geo-info{display:flex;gap:16px;margin-top:8px;font-size:12px;color:#888}
+select.user-select{width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;margin-bottom:8px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Site Management</h1>
+  <span>GPS Punch-in System</span>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('sites')">Sites</button>
+    <button class="tab" onclick="showTab('users')">Users</button>
+    <button class="tab" onclick="showTab('checkin')">Check-in</button>
+  </div>
+
+  <!-- SITES TAB -->
+  <div id="tab-sites" class="panel active">
+    <div class="form-section">
+      <h3>Create New Site</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Site Name *</label>
+          <input id="site-name" placeholder="e.g. Main Office">
+        </div>
+        <div class="form-group">
+          <label>Address</label>
+          <input id="site-address" placeholder="e.g. 123 Main St">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Latitude</label>
+          <input id="site-lat" type="number" step="any" placeholder="e.g. 28.6139">
+        </div>
+        <div class="form-group">
+          <label>Longitude</label>
+          <input id="site-lng" type="number" step="any" placeholder="e.g. 77.2090">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Punch-in Radius (meters)</label>
+          <input id="site-radius" type="number" value="15" min="1">
+        </div>
+        <div class="form-group" style="display:flex;align-items:flex-end">
+          <button class="lock-btn" onclick="getMyLocation()">Use My Location</button>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="createSite()">Create Site</button>
+    </div>
+    <div class="section-title">All Sites</div>
+    <div class="section-desc">Click a site to manage team members</div>
+    <div id="sites-list" class="card-grid"></div>
+  </div>
+
+  <!-- USERS TAB -->
+  <div id="tab-users" class="panel">
+    <div class="form-section">
+      <h3>Add New User</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Name *</label>
+          <input id="user-name" placeholder="Full name">
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input id="user-email" type="email" placeholder="email@example.com">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Phone</label>
+          <input id="user-phone" placeholder="+1234567890">
+        </div>
+        <div class="form-group">
+          <label>Role</label>
+          <select id="user-role">
+            <option value="member">Member</option>
+            <option value="manager">Manager</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="createUser()">Add User</button>
+    </div>
+    <div class="section-title">All Users</div>
+    <div id="users-list" class="card-grid"></div>
+  </div>
+
+  <!-- CHECK-IN TAB -->
+  <div id="tab-checkin" class="panel">
+    <div class="form-section">
+      <h3>GPS Punch-in Check</h3>
+      <div class="form-group">
+        <label>Select Site</label>
+        <select id="checkin-site"></select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Latitude</label>
+          <input id="checkin-lat" type="number" step="any" placeholder="28.6139">
+        </div>
+        <div class="form-group">
+          <label>Your Longitude</label>
+          <input id="checkin-lng" type="number" step="any" placeholder="77.2090">
+        </div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-success" onclick="doCheckin()">Check In</button>
+        <button class="lock-btn" onclick="getCheckinLocation()">Use My Location</button>
+      </div>
+    </div>
+    <div id="checkin-result"></div>
+  </div>
+</div>
+
+<!-- Site Detail Side Panel -->
+<div id="site-detail" class="site-detail-overlay" style="display:none">
+  <button class="close-btn" onclick="closeSiteDetail()">&times;</button>
+  <div id="site-detail-content"></div>
+</div>
+
+<script>
+const API = '';
+
+// ─── Tab Navigation ───
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'sites') loadSites();
+  if (name === 'users') loadUsers();
+  if (name === 'checkin') loadSitesDropdown();
+}
+
+function toast(msg, type = 'success') {
+  const t = document.createElement('div');
+  t.className = 'toast toast-' + type;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+// ─── GPS Lock ───
+function getMyLocation() {
+  if (!navigator.geolocation) return toast('Geolocation not supported', 'error');
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      document.getElementById('site-lat').value = pos.coords.latitude.toFixed(6);
+      document.getElementById('site-lng').value = pos.coords.longitude.toFixed(6);
+      toast('Location locked!');
+    },
+    err => toast('Could not get location: ' + err.message, 'error')
+  );
+}
+
+function getCheckinLocation() {
+  if (!navigator.geolocation) return toast('Geolocation not supported', 'error');
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      document.getElementById('checkin-lat').value = pos.coords.latitude.toFixed(6);
+      document.getElementById('checkin-lng').value = pos.coords.longitude.toFixed(6);
+      toast('Location locked!');
+    },
+    err => toast('Could not get location: ' + err.message, 'error')
+  );
+}
+
+// ─── SITES ───
+async function loadSites() {
+  const res = await fetch(API + '/api/sites');
+  const sites = await res.json();
+  const el = document.getElementById('sites-list');
+  if (!sites.length) { el.innerHTML = '<div class="empty">No sites yet. Create one above!</div>'; return; }
+  el.innerHTML = sites.map(s => `
+    <div class="card" style="cursor:pointer" onclick="openSiteDetail('${s.id}')">
+      <h3>${s.name}</h3>
+      <p>${s.address || 'No address'}</p>
+      <div class="geo-info">
+        ${s.latitude ? `<span>Lat: ${s.latitude.toFixed(4)}</span><span>Lng: ${s.longitude.toFixed(4)}</span>` : '<span>No GPS set</span>'}
+      </div>
+      <p>Radius: ${s.radius_meters}m</p>
+      <span class="badge badge-member">${s.member_count} member${s.member_count !== 1 ? 's' : ''}</span>
+      <div class="btn-group">
+        <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteSite('${s.id}')">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function createSite() {
+  const name = document.getElementById('site-name').value.trim();
+  if (!name) return toast('Site name is required', 'error');
+  const body = {
+    name,
+    address: document.getElementById('site-address').value.trim() || null,
+    latitude: parseFloat(document.getElementById('site-lat').value) || null,
+    longitude: parseFloat(document.getElementById('site-lng').value) || null,
+    radius_meters: parseInt(document.getElementById('site-radius').value) || 15,
+  };
+  const res = await fetch(API + '/api/sites', {
+    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)
+  });
+  if (!res.ok) return toast('Failed to create site', 'error');
+  toast('Site created!');
+  document.getElementById('site-name').value = '';
+  document.getElementById('site-address').value = '';
+  document.getElementById('site-lat').value = '';
+  document.getElementById('site-lng').value = '';
+  loadSites();
+}
+
+async function deleteSite(id) {
+  if (!confirm('Delete this site?')) return;
+  await fetch(API + '/api/sites/' + id, { method: 'DELETE' });
+  toast('Site deleted');
+  loadSites();
+  closeSiteDetail();
+}
+
+// ─── SITE DETAIL (Team Management) ───
+async function openSiteDetail(siteId) {
+  const [siteRes, membersRes, availRes] = await Promise.all([
+    fetch(API + '/api/sites/' + siteId),
+    fetch(API + '/api/sites/' + siteId + '/members'),
+    fetch(API + '/api/sites/' + siteId + '/available-members'),
+  ]);
+  const site = await siteRes.json();
+  const members = await membersRes.json();
+  const available = await availRes.json();
+
+  const el = document.getElementById('site-detail-content');
+  el.innerHTML = `
+    <h2 style="margin-bottom:4px">${site.name}</h2>
+    <p style="color:#888;font-size:13px;margin-bottom:16px">${site.address || 'No address'}</p>
+    <div style="background:#f8f9fa;padding:12px;border-radius:8px;margin-bottom:20px">
+      <div class="geo-info" style="margin:0">
+        ${site.latitude ? `<span>Lat: ${site.latitude.toFixed(4)}</span><span>Lng: ${site.longitude.toFixed(4)}</span>` : '<span>No GPS set</span>'}
+        <span>Radius: ${site.radius_meters}m</span>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom:12px">Team Members (${members.length})</h3>
+    <div style="margin-bottom:16px">
+      ${members.length === 0 ? '<p style="color:#999;font-size:13px">No members assigned yet</p>' :
+        members.map(m => `
+          <div class="member-chip">
+            ${m.user_name || m.user_id}
+            <button onclick="removeMember('${siteId}','${m.user_id}')" title="Remove">&times;</button>
+          </div>
+        `).join('')}
+    </div>
+
+    <h3 style="margin-bottom:12px">Add Member</h3>
+    ${available.length === 0 ? '<p style="color:#999;font-size:13px">All users already assigned</p>' : `
+      <select id="assign-select" class="user-select">
+        ${available.map(u => `<option value="${u.id}">${u.name} (${u.email})</option>`).join('')}
+      </select>
+      <button class="btn btn-primary btn-sm" onclick="assignMember('${siteId}')">Add to Site</button>
+    `}
+  `;
+  document.getElementById('site-detail').style.display = 'block';
+}
+
+function closeSiteDetail() {
+  document.getElementById('site-detail').style.display = 'none';
+}
+
+async function assignMember(siteId) {
+  const userId = document.getElementById('assign-select').value;
+  const res = await fetch(API + '/api/sites/' + siteId + '/members', {
+    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ user_id: userId })
+  });
+  if (!res.ok) return toast('Failed to assign', 'error');
+  toast('Member added!');
+  openSiteDetail(siteId);
+  loadSites();
+}
+
+async function removeMember(siteId, userId) {
+  await fetch(API + '/api/sites/' + siteId + '/members/' + userId, { method: 'DELETE' });
+  toast('Member removed');
+  openSiteDetail(siteId);
+  loadSites();
+}
+
+// ─── USERS ───
+async function loadUsers() {
+  const res = await fetch(API + '/api/users');
+  const users = await res.json();
+  const el = document.getElementById('users-list');
+  if (!users.length) { el.innerHTML = '<div class="empty">No users yet.</div>'; return; }
+  el.innerHTML = users.map(u => `
+    <div class="card">
+      <h3>${u.name}</h3>
+      <p>${u.email}</p>
+      ${u.phone ? `<p>${u.phone}</p>` : ''}
+      <span class="badge badge-${u.role}">${u.role}</span>
+      <div class="btn-group">
+        <button class="btn btn-danger btn-sm" onclick="deleteUser('${u.id}')">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function createUser() {
+  const name = document.getElementById('user-name').value.trim();
+  const email = document.getElementById('user-email').value.trim();
+  if (!name || !email) return toast('Name and email are required', 'error');
+  const body = {
+    name, email,
+    phone: document.getElementById('user-phone').value.trim() || null,
+    role: document.getElementById('user-role').value,
+  };
+  const res = await fetch(API + '/api/users', {
+    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    return toast(err.detail || 'Failed to create user', 'error');
+  }
+  toast('User added!');
+  document.getElementById('user-name').value = '';
+  document.getElementById('user-email').value = '';
+  document.getElementById('user-phone').value = '';
+  loadUsers();
+}
+
+async function deleteUser(id) {
+  if (!confirm('Delete this user?')) return;
+  await fetch(API + '/api/users/' + id, { method: 'DELETE' });
+  toast('User deleted');
+  loadUsers();
+}
+
+// ─── CHECK-IN ───
+async function loadSitesDropdown() {
+  const res = await fetch(API + '/api/sites');
+  const sites = await res.json();
+  const sel = document.getElementById('checkin-site');
+  sel.innerHTML = sites.length === 0
+    ? '<option>No sites available</option>'
+    : sites.map(s => `<option value="${s.id}">${s.name} (${s.address || 'no address'})</option>`).join('');
+}
+
+async function doCheckin() {
+  const siteId = document.getElementById('checkin-site').value;
+  const lat = parseFloat(document.getElementById('checkin-lat').value);
+  const lng = parseFloat(document.getElementById('checkin-lng').value);
+  if (!siteId || isNaN(lat) || isNaN(lng)) return toast('Fill all fields', 'error');
+
+  const res = await fetch(API + '/api/sites/' + siteId + '/check-in', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ user_id: 'manual', latitude: lat, longitude: lng })
+  });
+  const data = await res.json();
+  const el = document.getElementById('checkin-result');
+  el.innerHTML = `
+    <div class="checkin-result ${data.within_radius ? 'checkin-ok' : 'checkin-fail'}">
+      <h3>${data.within_radius ? 'Check-in Successful!' : 'Check-in Failed'}</h3>
+      <p>${data.message}</p>
+      <p style="margin-top:8px;font-size:12px;color:#888">Distance: ${data.distance_meters}m from site center</p>
+    </div>
+  `;
+}
+
+// ─── Init ───
+loadSites();
+</script>
+</body>
+</html>
