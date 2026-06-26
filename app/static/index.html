@@ -1,436 +1,1883 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Site Management</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f5;color:#333}
-.header{background:#1a73e8;color:#fff;padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
-.header h1{font-size:20px}
-.header span{font-size:13px;opacity:.8}
-.container{max-width:1100px;margin:0 auto;padding:20px}
-.tabs{display:flex;gap:4px;margin-bottom:20px;flex-wrap:wrap}
-.tab{padding:10px 20px;border:none;background:#fff;cursor:pointer;border-radius:8px 8px 0 0;font-size:14px;font-weight:500;color:#666;transition:.2s}
-.tab.active{background:#1a73e8;color:#fff}
-.panel{display:none;background:#fff;border-radius:0 8px 8px 8px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.panel.active{display:block}
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:16px}
-.card{background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:16px;transition:.2s}
-.card:hover{box-shadow:0 4px 12px rgba(0,0,0,.1)}
-.card h3{font-size:16px;margin-bottom:8px;color:#1a73e8}
-.card p{font-size:13px;color:#666;margin-bottom:4px}
-.card .badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600;margin-top:6px}
-.badge-admin{background:#e8f0fe;color:#1a73e8}
-.badge-manager{background:#fef7e0;color:#e8a000}
-.badge-member{background:#e6f4ea;color:#137333}
-.btn{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500;transition:.2s}
-.btn-primary{background:#1a73e8;color:#fff}
-.btn-primary:hover{background:#1557b0}
-.btn-danger{background:#ea4335;color:#fff}
-.btn-danger:hover{background:#c5221f}
-.btn-success{background:#137333;color:#fff}
-.btn-success:hover{background:#0d5c29}
-.btn-sm{padding:5px 12px;font-size:12px}
-.btn-group{display:flex;gap:8px;margin-top:12px}
-.form-group{margin-bottom:14px}
-.form-group label{display:block;font-size:13px;font-weight:500;margin-bottom:4px;color:#555}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:14px}
-.form-group input:focus{outline:none;border-color:#1a73e8}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.form-section{background:#f8f9fa;border-radius:8px;padding:20px;margin-bottom:20px}
-.form-section h3{font-size:15px;margin-bottom:14px;color:#333}
-.section-title{font-size:18px;font-weight:600;margin-bottom:4px}
-.section-desc{font-size:13px;color:#888;margin-bottom:16px}
-.member-chip{display:inline-flex;align-items:center;gap:6px;background:#e8f0fe;padding:6px 12px;border-radius:20px;font-size:13px;margin:4px}
-.member-chip button{background:none;border:none;color:#ea4335;cursor:pointer;font-size:16px;font-weight:700}
-.empty{text-align:center;padding:40px;color:#999;font-size:14px}
-.toast{position:fixed;top:20px;right:20px;padding:12px 20px;border-radius:8px;color:#fff;font-size:14px;z-index:999;animation:slideIn .3s}
-.toast-success{background:#137333}
-.toast-error{background:#ea4335}
-@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
-.checkin-result{margin-top:16px;padding:16px;border-radius:8px;text-align:center}
-.checkin-ok{background:#e6f4ea;border:2px solid #137333}
-.checkin-fail{background:#fce8e6;border:2px solid #ea4335}
-.checkin-result h3{font-size:20px;margin-bottom:8px}
-.checkin-result p{font-size:14px;color:#555}
-.site-detail-overlay{position:fixed;top:0;right:0;width:450px;height:100%;background:#fff;box-shadow:-4px 0 20px rgba(0,0,0,.15);z-index:100;overflow-y:auto;padding:24px;transition:.3s}
-.site-detail-overlay .close-btn{position:absolute;top:12px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:#666}
-.lock-btn{padding:6px 14px;border:2px solid #1a73e8;background:#fff;color:#1a73e8;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600}
-.lock-btn:hover{background:#e8f0fe}
-.geo-info{display:flex;gap:16px;margin-top:8px;font-size:12px;color:#888}
-select.user-select{width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;margin-bottom:8px}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geotag Attendance & Site Management System</title>
+  
+  <!-- Leaflet CSS for Interactive Maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ────────────────────────────────────────────────────────
+       DESIGN SYSTEM & CSS VARIABLES
+       ──────────────────────────────────────────────────────── */
+    :root {
+      --font-header: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      
+      /* Light Mode Palette */
+      --bg-app: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-glass: rgba(255, 255, 255, 0.75);
+      --border-color: #e2e8f0;
+      --border-glass: rgba(226, 232, 240, 0.8);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #e0e7ff;
+      --primary-glow: rgba(79, 70, 229, 0.15);
+      
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --success-glow: rgba(16, 185, 129, 0.15);
+      
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      
+      --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 8px 30px -4px rgba(0, 0, 0, 0.06), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 20px 40px -4px rgba(0, 0, 0, 0.1), 0 8px 16px -4px rgba(0, 0, 0, 0.05);
+      
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      
+      --map-tile-filter: none;
+    }
+
+    [data-theme="dark"] {
+      /* Dark Mode Palette */
+      --bg-app: #080c14;
+      --bg-surface: #111827;
+      --bg-surface-glass: rgba(17, 24, 39, 0.7);
+      --border-color: #1f2937;
+      --border-glass: rgba(31, 41, 55, 0.6);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-light: rgba(99, 102, 241, 0.15);
+      --primary-glow: rgba(99, 102, 241, 0.3);
+      
+      --success: #10b981;
+      --success-light: rgba(16, 185, 129, 0.15);
+      --success-glow: rgba(16, 185, 129, 0.3);
+      
+      --danger: #f87171;
+      --danger-light: rgba(248, 113, 113, 0.15);
+      
+      --warning: #fbbf24;
+      --warning-light: rgba(251, 191, 36, 0.15);
+      
+      --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 8px 30px -4px rgba(0, 0, 0, 0.4), 0 4px 12px -2px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 20px 40px -4px rgba(0, 0, 0, 0.5), 0 8px 16px -4px rgba(0, 0, 0, 0.4);
+      
+      --map-tile-filter: invert(90%) hue-rotate(180deg) brightness(95%) contrast(90%);
+    }
+
+    /* ────────────────────────────────────────────────────────
+       BASE STYLES
+       ──────────────────────────────────────────────────────── */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.15s ease;
+    }
+    
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-header);
+      font-weight: 600;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }
+
+    /* ────────────────────────────────────────────────────────
+       HEADER & NAVIGATION
+       ──────────────────────────────────────────────────────── */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--bg-surface-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-glass);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--primary), #a855f7);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    .logo-text h1 {
+      font-size: 18px;
+      letter-spacing: -0.5px;
+      background: linear-gradient(to right, var(--text-main), var(--text-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-text span {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: block;
+      margin-top: -2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--success-light);
+      color: var(--success);
+      font-weight: 500;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--success);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border-color);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-main);
+    }
+
+    .theme-toggle:hover {
+      background-color: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    /* ────────────────────────────────────────────────────────
+       LAYOUT CONTAINER & PANELS
+       ──────────────────────────────────────────────────────── */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Stats Overview Dashboard */
+    .stats-dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stat-info h3 {
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .stat-info p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Tab Controls */
+    .tabs-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 2px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+    }
+
+    .tab {
+      padding: 10px 18px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+      position: relative;
+    }
+
+    .tab::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: transparent;
+      border-radius: 2px;
+      transition: background-color 0.2s ease;
+    }
+
+    .tab.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .tab.active::after {
+      background-color: var(--primary);
+    }
+
+    .tab:hover:not(.active) {
+      color: var(--text-main);
+    }
+
+    /* Panel Layout: Left Actions, Right Map Map Split */
+    .panel {
+      display: none;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .panel.active {
+      display: grid;
+    }
+
+    @media (min-width: 992px) {
+      .panel-split {
+        grid-template-columns: 450px 1fr;
+      }
+    }
+
+    .panel-content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-height: 75vh;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    /* ────────────────────────────────────────────────────────
+       UI CARDS, FORMS & INPUTS
+       ──────────────────────────────────────────────────────── */
+    .card-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-panel h2 {
+      font-size: 16px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-main);
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      width: 16px;
+      height: 16px;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 10px 14px 10px 38px;
+      background: var(--bg-app);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      outline: none;
+    }
+
+    .form-group select {
+      appearance: none;
+      padding-left: 38px;
+      cursor: pointer;
+    }
+
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid transparent;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #dc2626;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 11px;
+      border-radius: 6px;
+    }
+
+    /* Grids & Cards Lists */
+    .list-wrapper {
+      margin-top: 8px;
+    }
+
+    .list-title {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .cards-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .entity-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .entity-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+      transform: scale(1.01);
+    }
+
+    .entity-card.selected {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--primary);
+      background-color: var(--primary-light);
+    }
+
+    .entity-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .entity-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .entity-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .entity-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .entity-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: capitalize;
+    }
+
+    .badge-member { background: var(--primary-light); color: var(--primary); }
+    .badge-manager { background: var(--warning-light); color: var(--warning); }
+    .badge-admin { background: var(--success-light); color: var(--success); }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 30px;
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    /* ────────────────────────────────────────────────────────
+       INTERACTIVE MAP PANEL
+       ──────────────────────────────────────────────────────── */
+    .map-wrapper {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      height: 400px;
+    }
+
+    @media (min-width: 992px) {
+      .map-wrapper {
+        height: auto;
+        min-height: 600px;
+      }
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+    }
+
+    /* Apply Dark theme custom filters to OpenStreetMap tiles */
+    .leaflet-tile-container img {
+      filter: var(--map-tile-filter);
+    }
+
+    .map-overlay-tip {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      z-index: 1000;
+      background: var(--bg-surface-glass);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 6px 12px;
+      border-radius: 30px;
+      font-size: 11px;
+      border: 1px solid var(--border-glass);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
+    }
+
+    /* ────────────────────────────────────────────────────────
+       SLIDE-OUT SITE DETAILS DRAWER
+       ──────────────────────────────────────────────────────── */
+    .drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -450px;
+      width: 100%;
+      max-width: 440px;
+      height: 100%;
+      background: var(--bg-surface);
+      border-left: 1px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
+      z-index: 10000;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+      transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .drawer-overlay.open {
+      display: block;
+      opacity: 1;
+    }
+
+    .drawer.open {
+      right: 0;
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .close-drawer {
+      background: var(--bg-app);
+      border: 1px solid var(--border-color);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-main);
+    }
+
+    .close-drawer:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .member-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-app);
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      margin: 4px;
+    }
+
+    .member-chip button {
+      background: none;
+      border: none;
+      color: var(--danger);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+    }
+
+    /* ────────────────────────────────────────────────────────
+       CHECK-IN STATUS & RESULTS
+       ──────────────────────────────────────────────────────── */
+    .radar-circle {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px auto;
+      position: relative;
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .radar-circle::after {
+      content: '';
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      right: -15px;
+      bottom: -15px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: ripple 1.6s linear infinite;
+    }
+
+    @keyframes ripple {
+      0% { transform: scale(0.6); opacity: 1; }
+      100% { transform: scale(1.3); opacity: 0; }
+    }
+
+    .checkin-response-box {
+      margin-top: 16px;
+      padding: 20px;
+      border-radius: var(--radius-md);
+      text-align: center;
+      border: 1px solid var(--border-color);
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .checkin-response-box.success {
+      background: var(--success-light);
+      border-color: var(--success);
+      color: var(--text-main);
+    }
+
+    .checkin-response-box.fail {
+      background: var(--danger-light);
+      border-color: var(--danger);
+      color: var(--text-main);
+    }
+
+    .checkin-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+      color: white;
+      font-weight: bold;
+    }
+
+    .success .checkin-icon { background-color: var(--success); }
+    .fail .checkin-icon { background-color: var(--danger); }
+
+    @keyframes slideUp {
+      from { transform: translateY(15px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* ────────────────────────────────────────────────────────
+       CUSTOM TOAST ALERTS
+       ──────────────────────────────────────────────────────── */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--primary);
+      color: var(--text-main);
+      padding: 12px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateX(120%);
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+
+    .toast-success { border-left-color: var(--success); }
+    .toast-error { border-left-color: var(--danger); }
+  </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>Site Management</h1>
-  <span>GPS Punch-in System</span>
-</div>
-
-<div class="container">
-  <div class="tabs">
-    <button class="tab active" onclick="showTab('sites')">Sites</button>
-    <button class="tab" onclick="showTab('users')">Users</button>
-    <button class="tab" onclick="showTab('checkin')">Check-in</button>
-  </div>
-
-  <!-- SITES TAB -->
-  <div id="tab-sites" class="panel active">
-    <div class="form-section">
-      <h3>Create New Site</h3>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Site Name *</label>
-          <input id="site-name" placeholder="e.g. Main Office">
-        </div>
-        <div class="form-group">
-          <label>Address</label>
-          <input id="site-address" placeholder="e.g. 123 Main St">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Latitude</label>
-          <input id="site-lat" type="number" step="any" placeholder="e.g. 28.6139">
-        </div>
-        <div class="form-group">
-          <label>Longitude</label>
-          <input id="site-lng" type="number" step="any" placeholder="e.g. 77.2090">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Punch-in Radius (meters)</label>
-          <input id="site-radius" type="number" value="15" min="1">
-        </div>
-        <div class="form-group" style="display:flex;align-items:flex-end">
-          <button class="lock-btn" onclick="getMyLocation()">Use My Location</button>
-        </div>
-      </div>
-      <button class="btn btn-primary" onclick="createSite()">Create Site</button>
-    </div>
-    <div class="section-title">All Sites</div>
-    <div class="section-desc">Click a site to manage team members</div>
-    <div id="sites-list" class="card-grid"></div>
-  </div>
-
-  <!-- USERS TAB -->
-  <div id="tab-users" class="panel">
-    <div class="form-section">
-      <h3>Add New User</h3>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Name *</label>
-          <input id="user-name" placeholder="Full name">
-        </div>
-        <div class="form-group">
-          <label>Email *</label>
-          <input id="user-email" type="email" placeholder="email@example.com">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Phone</label>
-          <input id="user-phone" placeholder="+1234567890">
-        </div>
-        <div class="form-group">
-          <label>Role</label>
-          <select id="user-role">
-            <option value="member">Member</option>
-            <option value="manager">Manager</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
-      </div>
-      <button class="btn btn-primary" onclick="createUser()">Add User</button>
-    </div>
-    <div class="section-title">All Users</div>
-    <div id="users-list" class="card-grid"></div>
-  </div>
-
-  <!-- CHECK-IN TAB -->
-  <div id="tab-checkin" class="panel">
-    <div class="form-section">
-      <h3>GPS Punch-in Check</h3>
-      <div class="form-group">
-        <label>Select Site</label>
-        <select id="checkin-site"></select>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Your Latitude</label>
-          <input id="checkin-lat" type="number" step="any" placeholder="28.6139">
-        </div>
-        <div class="form-group">
-          <label>Your Longitude</label>
-          <input id="checkin-lng" type="number" step="any" placeholder="77.2090">
-        </div>
-      </div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-success" onclick="doCheckin()">Check In</button>
-        <button class="lock-btn" onclick="getCheckinLocation()">Use My Location</button>
+  <!-- ────────────────────────────────────────────────────────
+       TOP HEADER
+       ──────────────────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-logo">
+      <div class="logo-icon">G</div>
+      <div class="logo-text">
+        <h1>Geotag Attendance</h1>
+        <span>Site Management Dashboard</span>
       </div>
     </div>
-    <div id="checkin-result"></div>
-  </div>
-</div>
-
-<!-- Site Detail Side Panel -->
-<div id="site-detail" class="site-detail-overlay" style="display:none">
-  <button class="close-btn" onclick="closeSiteDetail()">&times;</button>
-  <div id="site-detail-content"></div>
-</div>
-
-<script>
-const API = '';
-
-// ─── Tab Navigation ───
-function showTab(name) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  event.target.classList.add('active');
-  document.getElementById('tab-' + name).classList.add('active');
-  if (name === 'sites') loadSites();
-  if (name === 'users') loadUsers();
-  if (name === 'checkin') loadSitesDropdown();
-}
-
-function toast(msg, type = 'success') {
-  const t = document.createElement('div');
-  t.className = 'toast toast-' + type;
-  t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(() => t.remove(), 3000);
-}
-
-// ─── GPS Lock ───
-function getMyLocation() {
-  if (!navigator.geolocation) return toast('Geolocation not supported', 'error');
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      document.getElementById('site-lat').value = pos.coords.latitude.toFixed(6);
-      document.getElementById('site-lng').value = pos.coords.longitude.toFixed(6);
-      toast('Location locked!');
-    },
-    err => toast('Could not get location: ' + err.message, 'error')
-  );
-}
-
-function getCheckinLocation() {
-  if (!navigator.geolocation) return toast('Geolocation not supported', 'error');
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      document.getElementById('checkin-lat').value = pos.coords.latitude.toFixed(6);
-      document.getElementById('checkin-lng').value = pos.coords.longitude.toFixed(6);
-      toast('Location locked!');
-    },
-    err => toast('Could not get location: ' + err.message, 'error')
-  );
-}
-
-// ─── SITES ───
-async function loadSites() {
-  const res = await fetch(API + '/api/sites');
-  const sites = await res.json();
-  const el = document.getElementById('sites-list');
-  if (!sites.length) { el.innerHTML = '<div class="empty">No sites yet. Create one above!</div>'; return; }
-  el.innerHTML = sites.map(s => `
-    <div class="card" style="cursor:pointer" onclick="openSiteDetail('${s.id}')">
-      <h3>${s.name}</h3>
-      <p>${s.address || 'No address'}</p>
-      <div class="geo-info">
-        ${s.latitude ? `<span>Lat: ${s.latitude.toFixed(4)}</span><span>Lng: ${s.longitude.toFixed(4)}</span>` : '<span>No GPS set</span>'}
+    
+    <div class="header-actions">
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        <span>Local Database</span>
       </div>
-      <p>Radius: ${s.radius_meters}m</p>
-      <span class="badge badge-member">${s.member_count} member${s.member_count !== 1 ? 's' : ''}</span>
-      <div class="btn-group">
-        <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteSite('${s.id}')">Delete</button>
-      </div>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Switch Light/Dark Mode" id="themeBtn">
+        <!-- Sun Icon (shown in dark mode) -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="sun-icon">
+          <circle cx="12" cy="12" r="5"></circle>
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+        </svg>
+      </button>
     </div>
-  `).join('');
-}
+  </header>
 
-async function createSite() {
-  const name = document.getElementById('site-name').value.trim();
-  if (!name) return toast('Site name is required', 'error');
-  const body = {
-    name,
-    address: document.getElementById('site-address').value.trim() || null,
-    latitude: parseFloat(document.getElementById('site-lat').value) || null,
-    longitude: parseFloat(document.getElementById('site-lng').value) || null,
-    radius_meters: parseInt(document.getElementById('site-radius').value) || 15,
-  };
-  const res = await fetch(API + '/api/sites', {
-    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)
-  });
-  if (!res.ok) return toast('Failed to create site', 'error');
-  toast('Site created!');
-  document.getElementById('site-name').value = '';
-  document.getElementById('site-address').value = '';
-  document.getElementById('site-lat').value = '';
-  document.getElementById('site-lng').value = '';
-  loadSites();
-}
-
-async function deleteSite(id) {
-  if (!confirm('Delete this site?')) return;
-  await fetch(API + '/api/sites/' + id, { method: 'DELETE' });
-  toast('Site deleted');
-  loadSites();
-  closeSiteDetail();
-}
-
-// ─── SITE DETAIL (Team Management) ───
-async function openSiteDetail(siteId) {
-  const [siteRes, membersRes, availRes] = await Promise.all([
-    fetch(API + '/api/sites/' + siteId),
-    fetch(API + '/api/sites/' + siteId + '/members'),
-    fetch(API + '/api/sites/' + siteId + '/available-members'),
-  ]);
-  const site = await siteRes.json();
-  const members = await membersRes.json();
-  const available = await availRes.json();
-
-  const el = document.getElementById('site-detail-content');
-  el.innerHTML = `
-    <h2 style="margin-bottom:4px">${site.name}</h2>
-    <p style="color:#888;font-size:13px;margin-bottom:16px">${site.address || 'No address'}</p>
-    <div style="background:#f8f9fa;padding:12px;border-radius:8px;margin-bottom:20px">
-      <div class="geo-info" style="margin:0">
-        ${site.latitude ? `<span>Lat: ${site.latitude.toFixed(4)}</span><span>Lng: ${site.longitude.toFixed(4)}</span>` : '<span>No GPS set</span>'}
-        <span>Radius: ${site.radius_meters}m</span>
+  <!-- ────────────────────────────────────────────────────────
+       MAIN DASHBOARD CONTAINER
+       ──────────────────────────────────────────────────────── -->
+  <main class="container">
+    
+    <!-- STATS ROW -->
+    <section class="stats-dashboard">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <h3 id="stat-sites-count">-</h3>
+          <p>Active Sites Geofenced</p>
+        </div>
       </div>
-    </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"></path>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <h3 id="stat-users-count">-</h3>
+          <p>Registered Members</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <h3 id="stat-status-text">SQLite</h3>
+          <p>Database Engine</p>
+        </div>
+      </div>
+    </section>
 
-    <h3 style="margin-bottom:12px">Team Members (${members.length})</h3>
-    <div style="margin-bottom:16px">
-      ${members.length === 0 ? '<p style="color:#999;font-size:13px">No members assigned yet</p>' :
-        members.map(m => `
-          <div class="member-chip">
-            ${m.user_name || m.user_id}
-            <button onclick="removeMember('${siteId}','${m.user_id}')" title="Remove">&times;</button>
+    <!-- TABS CONTROLS -->
+    <section class="tabs-wrapper">
+      <div class="tabs">
+        <button class="tab active" onclick="showTab('sites')" id="tab-btn-sites">Sites Management</button>
+        <button class="tab" onclick="showTab('users')" id="tab-btn-users">Members Directory</button>
+        <button class="tab" onclick="showTab('checkin')" id="tab-btn-checkin">GPS Punch-In Simulator</button>
+      </div>
+    </section>
+
+    <!-- ────────────────────────────────────────────────────────
+         TAB: SITES MANAGEMENT (SPLIT GRID)
+         ──────────────────────────────────────────────────────── -->
+    <section id="tab-sites" class="panel panel-split active">
+      
+      <!-- Left Panel: Create site + List of sites -->
+      <div class="panel-content">
+        <div class="card-panel">
+          <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Create New Geotagged Site
+          </h2>
+          
+          <div class="form-group">
+            <label>Site Name *</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              <input id="site-name" placeholder="e.g. Headquarters / Project Site A">
+            </div>
           </div>
-        `).join('')}
-    </div>
+          
+          <div class="form-group">
+            <label>Address / Description</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <input id="site-address" placeholder="e.g. 101 Innovation Way, Tech District">
+            </div>
+          </div>
 
-    <h3 style="margin-bottom:12px">Add Member</h3>
-    ${available.length === 0 ? '<p style="color:#999;font-size:13px">All users already assigned</p>' : `
-      <select id="assign-select" class="user-select">
-        ${available.map(u => `<option value="${u.id}">${u.name} (${u.email})</option>`).join('')}
-      </select>
-      <button class="btn btn-primary btn-sm" onclick="assignMember('${siteId}')">Add to Site</button>
-    `}
-  `;
-  document.getElementById('site-detail').style.display = 'block';
-}
+          <div class="form-row">
+            <div class="form-group">
+              <label>Latitude *</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                <input id="site-lat" type="number" step="any" placeholder="e.g. 28.6139">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Longitude *</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                <input id="site-lng" type="number" step="any" placeholder="e.g. 77.2090">
+              </div>
+            </div>
+          </div>
 
-function closeSiteDetail() {
-  document.getElementById('site-detail').style.display = 'none';
-}
+          <div class="form-group">
+            <label>Geofence Radius: <span id="radius-val" style="color:var(--primary); font-weight:600">30</span> meters</label>
+            <div style="display:flex; align-items:center; gap:12px; margin-top:6px">
+              <input id="site-radius" type="range" min="5" max="150" value="30" style="padding:0; height:6px; cursor:pointer" oninput="document.getElementById('radius-val').textContent = this.value; updateSiteRangeCircle()">
+              <button class="btn btn-secondary btn-sm" onclick="getMyLocation()" style="width:auto; white-space:nowrap; padding:8px 12px">
+                Locate Me
+              </button>
+            </div>
+          </div>
 
-async function assignMember(siteId) {
-  const userId = document.getElementById('assign-select').value;
-  const res = await fetch(API + '/api/sites/' + siteId + '/members', {
-    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ user_id: userId })
-  });
-  if (!res.ok) return toast('Failed to assign', 'error');
-  toast('Member added!');
-  openSiteDetail(siteId);
-  loadSites();
-}
+          <button class="btn btn-primary" onclick="createSite()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"></path></svg>
+            Save Site & Geofence
+          </button>
+        </div>
 
-async function removeMember(siteId, userId) {
-  await fetch(API + '/api/sites/' + siteId + '/members/' + userId, { method: 'DELETE' });
-  toast('Member removed');
-  openSiteDetail(siteId);
-  loadSites();
-}
-
-// ─── USERS ───
-async function loadUsers() {
-  const res = await fetch(API + '/api/users');
-  const users = await res.json();
-  const el = document.getElementById('users-list');
-  if (!users.length) { el.innerHTML = '<div class="empty">No users yet.</div>'; return; }
-  el.innerHTML = users.map(u => `
-    <div class="card">
-      <h3>${u.name}</h3>
-      <p>${u.email}</p>
-      ${u.phone ? `<p>${u.phone}</p>` : ''}
-      <span class="badge badge-${u.role}">${u.role}</span>
-      <div class="btn-group">
-        <button class="btn btn-danger btn-sm" onclick="deleteUser('${u.id}')">Delete</button>
+        <div class="list-wrapper">
+          <div class="list-title">Redundant Geofenced Sites</div>
+          <div id="sites-list" class="cards-grid">
+            <!-- Site elements dynamically appended here -->
+          </div>
+        </div>
       </div>
+      
+      <!-- Right Panel: Interactive Leaflet Map -->
+      <div class="map-wrapper">
+        <div id="map"></div>
+        <div class="map-overlay-tip">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span>Click anywhere on the map to pin/adjust coordinates</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────────────────────────────────────────────────────────
+         TAB: MEMBERS DIRECTORY
+         ──────────────────────────────────────────────────────── -->
+    <section id="tab-users" class="panel">
+      <div class="card-panel" style="max-width: 550px; margin: 0 auto; width: 100%;">
+        <h2>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M18 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          Add New Team Member
+        </h2>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+              <input id="user-name" placeholder="John Doe">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              <input id="user-email" type="email" placeholder="john@company.com">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone Number</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              <input id="user-phone" placeholder="+1 (555) 000-0000">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Permission Role</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              <select id="user-role">
+                <option value="member">Field Member</option>
+                <option value="manager">Site Manager</option>
+                <option value="admin">Administrator</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="createUser()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 4v16m8-8H4"></path></svg>
+          Register Member
+        </button>
+      </div>
+
+      <div class="list-wrapper" style="margin-top: 24px;">
+        <div class="list-title">Registered Team Directory</div>
+        <div id="users-list" class="cards-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;">
+          <!-- User profiles dynamically loaded -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ────────────────────────────────────────────────────────
+         TAB: GPS PUNCH-IN SIMULATOR
+         ──────────────────────────────────────────────────────── -->
+    <section id="tab-checkin" class="panel panel-split">
+      <!-- Left Panel: Check-in Actions -->
+      <div class="panel-content">
+        <div class="card-panel">
+          <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+            </svg>
+            Verify Location Check-In
+          </h2>
+
+          <div class="form-group">
+            <label>Target Site Geofence *</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <select id="checkin-site" onchange="updateCheckinSiteHighlight()">
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Your Simulated Latitude *</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                <input id="checkin-lat" type="number" step="any" placeholder="28.6139">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Your Simulated Longitude *</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                <input id="checkin-lng" type="number" step="any" placeholder="77.2090">
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:8px">
+            <button class="btn btn-secondary" onclick="getCheckinLocation()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+              Lock Real GPS
+            </button>
+            <button class="btn btn-primary" onclick="doCheckin()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              Submit Check-In
+            </button>
+          </div>
+        </div>
+
+        <div id="checkin-result">
+          <!-- Dynamic outcomes displayed here -->
+        </div>
+      </div>
+      
+      <!-- Right Panel: Checkin Map View -->
+      <div class="map-wrapper">
+        <div id="map-checkin" style="width:100%; height:100%; z-index:10"></div>
+        <div class="map-overlay-tip">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span>Drag the map pin or click to simulate your check-in coordinates</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ────────────────────────────────────────────────────────
+       SLIDE-OUT TEAM MEMBERS DRAWER
+       ──────────────────────────────────────────────────────── -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeSiteDetail()"></div>
+  <div class="drawer" id="site-detail">
+    <div class="drawer-header">
+      <h2 style="font-size:18px">Geofenced Site Details</h2>
+      <button class="close-drawer" onclick="closeSiteDetail()">&times;</button>
     </div>
-  `).join('');
-}
-
-async function createUser() {
-  const name = document.getElementById('user-name').value.trim();
-  const email = document.getElementById('user-email').value.trim();
-  if (!name || !email) return toast('Name and email are required', 'error');
-  const body = {
-    name, email,
-    phone: document.getElementById('user-phone').value.trim() || null,
-    role: document.getElementById('user-role').value,
-  };
-  const res = await fetch(API + '/api/users', {
-    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)
-  });
-  if (!res.ok) {
-    const err = await res.json();
-    return toast(err.detail || 'Failed to create user', 'error');
-  }
-  toast('User added!');
-  document.getElementById('user-name').value = '';
-  document.getElementById('user-email').value = '';
-  document.getElementById('user-phone').value = '';
-  loadUsers();
-}
-
-async function deleteUser(id) {
-  if (!confirm('Delete this user?')) return;
-  await fetch(API + '/api/users/' + id, { method: 'DELETE' });
-  toast('User deleted');
-  loadUsers();
-}
-
-// ─── CHECK-IN ───
-async function loadSitesDropdown() {
-  const res = await fetch(API + '/api/sites');
-  const sites = await res.json();
-  const sel = document.getElementById('checkin-site');
-  sel.innerHTML = sites.length === 0
-    ? '<option>No sites available</option>'
-    : sites.map(s => `<option value="${s.id}">${s.name} (${s.address || 'no address'})</option>`).join('');
-}
-
-async function doCheckin() {
-  const siteId = document.getElementById('checkin-site').value;
-  const lat = parseFloat(document.getElementById('checkin-lat').value);
-  const lng = parseFloat(document.getElementById('checkin-lng').value);
-  if (!siteId || isNaN(lat) || isNaN(lng)) return toast('Fill all fields', 'error');
-
-  const res = await fetch(API + '/api/sites/' + siteId + '/check-in', {
-    method: 'POST', headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ user_id: 'manual', latitude: lat, longitude: lng })
-  });
-  const data = await res.json();
-  const el = document.getElementById('checkin-result');
-  el.innerHTML = `
-    <div class="checkin-result ${data.within_radius ? 'checkin-ok' : 'checkin-fail'}">
-      <h3>${data.within_radius ? 'Check-in Successful!' : 'Check-in Failed'}</h3>
-      <p>${data.message}</p>
-      <p style="margin-top:8px;font-size:12px;color:#888">Distance: ${data.distance_meters}m from site center</p>
+    <div id="site-detail-content">
+      <!-- Loaded dynamically -->
     </div>
-  `;
-}
+  </div>
 
-// ─── Init ───
-loadSites();
-</script>
+  <!-- TOAST ALERTS ROOT -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ────────────────────────────────────────────────────────
+       JAVASCRIPT LOGIC & LEAFLET MAPS
+       ──────────────────────────────────────────────────────── -->
+  <!-- Leaflet Library -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <script>
+    const API = '';
+    let currentTheme = 'dark';
+    
+    // Maps state
+    let sitesMap = null;
+    let checkinMap = null;
+    
+    // Markers & Shapes
+    let sitesLayerGroup = null;
+    let sitesCircleGroup = null;
+    let customDraggableMarker = null;
+    let currentFormCircle = null;
+
+    let checkinUserMarker = null;
+    let checkinSiteCircle = null;
+    let checkinSiteMarker = null;
+
+    // Cache of loaded sites
+    let globalSites = [];
+
+    // ─── Theme Management ───
+    function initTheme() {
+      const stored = localStorage.getItem('theme');
+      if (stored) {
+        currentTheme = stored;
+      } else {
+        currentTheme = 'dark';
+      }
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      updateThemeToggleBtn();
+    }
+
+    function toggleTheme() {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      localStorage.setItem('theme', currentTheme);
+      updateThemeToggleBtn();
+      
+      // Force leaflet maps to update their tile filters instantly
+      const filterStyle = getComputedStyle(document.documentElement).getPropertyValue('--map-tile-filter');
+      document.querySelectorAll('.leaflet-tile-container img').forEach(img => {
+        img.style.filter = filterStyle;
+      });
+    }
+
+    function updateThemeToggleBtn() {
+      const btn = document.getElementById('themeBtn');
+      if (currentTheme === 'dark') {
+        btn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:#fbbf24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+          </svg>
+        `;
+      } else {
+        btn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:#475569">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+          </svg>
+        `;
+      }
+    }
+
+    // ─── Custom Toasts ───
+    function toast(msg, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const t = document.createElement('div');
+      t.className = `toast toast-${type}`;
+      
+      const icon = type === 'success' 
+        ? `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color:var(--success)"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
+        : `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color:var(--danger)"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+      
+      t.innerHTML = `${icon} <span>${msg}</span>`;
+      container.appendChild(t);
+      
+      // Trigger entrance
+      setTimeout(() => t.classList.add('show'), 50);
+      
+      // Auto remove
+      setTimeout(() => {
+        t.classList.remove('show');
+        setTimeout(() => t.remove(), 400);
+      }, 3500);
+    }
+
+    // ─── Maps Setup ───
+    function initSitesMap() {
+      if (sitesMap) return;
+      
+      // Default: Centered on New Delhi / India coordinates (matching original placeholders)
+      sitesMap = L.map('map', {
+        zoomControl: false
+      }).setView([28.6139, 77.2090], 13);
+      
+      L.control.zoom({ position: 'bottomright' }).addTo(sitesMap);
+      
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(sitesMap);
+
+      sitesLayerGroup = L.layerGroup().addTo(sitesMap);
+      sitesCircleGroup = L.layerGroup().addTo(sitesMap);
+
+      // Listen for clicks on map to set new coordinates
+      sitesMap.on('click', function(e) {
+        setCoordinates(e.latlng.lat, e.latlng.lng);
+      });
+    }
+
+    function initCheckinMap() {
+      if (checkinMap) return;
+      
+      checkinMap = L.map('map-checkin', {
+        zoomControl: false
+      }).setView([28.6139, 77.2090], 14);
+      
+      L.control.zoom({ position: 'bottomright' }).addTo(checkinMap);
+      
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(checkinMap);
+
+      // Listen for map clicks to update checkin target location
+      checkinMap.on('click', function(e) {
+        setCheckinCoordinates(e.latlng.lat, e.latlng.lng);
+      });
+    }
+
+    // Update coordinate fields and position indicator marker
+    function setCoordinates(lat, lng) {
+      document.getElementById('site-lat').value = lat.toFixed(6);
+      document.getElementById('site-lng').value = lng.toFixed(6);
+      
+      const radius = parseFloat(document.getElementById('site-radius').value) || 30;
+
+      // Update draggable map marker
+      if (customDraggableMarker) {
+        customDraggableMarker.setLatLng([lat, lng]);
+      } else {
+        customDraggableMarker = L.marker([lat, lng], { draggable: true }).addTo(sitesMap);
+        customDraggableMarker.on('dragend', function(e) {
+          const pos = e.target.getLatLng();
+          setCoordinates(pos.lat, pos.lng);
+        });
+      }
+
+      // Update range circle preview
+      if (currentFormCircle) {
+        currentFormCircle.setLatLng([lat, lng]);
+        currentFormCircle.setRadius(radius);
+      } else {
+        currentFormCircle = L.circle([lat, lng], {
+          radius: radius,
+          color: '#6366f1',
+          fillColor: '#6366f1',
+          fillOpacity: 0.2
+        }).addTo(sitesMap);
+      }
+
+      sitesMap.panTo([lat, lng]);
+    }
+
+    function updateSiteRangeCircle() {
+      const radius = parseFloat(document.getElementById('site-radius').value) || 30;
+      const lat = parseFloat(document.getElementById('site-lat').value);
+      const lng = parseFloat(document.getElementById('site-lng').value);
+      
+      if (currentFormCircle && !isNaN(lat) && !isNaN(lng)) {
+        currentFormCircle.setRadius(radius);
+      }
+    }
+
+    function setCheckinCoordinates(lat, lng) {
+      document.getElementById('checkin-lat').value = lat.toFixed(6);
+      document.getElementById('checkin-lng').value = lng.toFixed(6);
+      
+      if (checkinUserMarker) {
+        checkinUserMarker.setLatLng([lat, lng]);
+      } else {
+        checkinUserMarker = L.marker([lat, lng], { 
+          draggable: true,
+          title: 'Your Location'
+        }).addTo(checkinMap);
+        
+        checkinUserMarker.on('dragend', function(e) {
+          const pos = e.target.getLatLng();
+          setCheckinCoordinates(pos.lat, pos.lng);
+        });
+      }
+      
+      checkinMap.panTo([lat, lng]);
+    }
+
+    // ─── GPS Locks ───
+    function getMyLocation() {
+      if (!navigator.geolocation) return toast('Geolocation not supported', 'error');
+      
+      toast('Locating current coordinate...');
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          setCoordinates(pos.coords.latitude, pos.coords.longitude);
+          toast('Location locked!');
+        },
+        err => toast('Could not fetch location: ' + err.message, 'error')
+      );
+    }
+
+    function getCheckinLocation() {
+      if (!navigator.geolocation) return toast('Geolocation not supported', 'error');
+      
+      toast('Locating current coordinate...');
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          setCheckinCoordinates(pos.coords.latitude, pos.coords.longitude);
+          toast('Location locked!');
+        },
+        err => toast('Could not fetch location: ' + err.message, 'error')
+      );
+    }
+
+    // ─── Tabs Switch ───
+    function showTab(name) {
+      // Manage CSS Classes
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      
+      document.getElementById('tab-btn-' + name).classList.add('active');
+      const panel = document.getElementById('tab-' + name);
+      panel.classList.add('active');
+      
+      // Load specific dependencies & invalidate size of Leaflet maps to fix loading glitches
+      if (name === 'sites') {
+        loadSites();
+        setTimeout(() => {
+          initSitesMap();
+          sitesMap.invalidateSize();
+        }, 100);
+      }
+      if (name === 'users') {
+        loadUsers();
+      }
+      if (name === 'checkin') {
+        loadSitesDropdown();
+        setTimeout(() => {
+          initCheckinMap();
+          checkinMap.invalidateSize();
+        }, 100);
+      }
+    }
+
+    // ─── API: SITES ───
+    async function loadSites() {
+      try {
+        const res = await fetch(API + '/api/sites');
+        const sites = await res.json();
+        globalSites = sites;
+        
+        // Update stats
+        document.getElementById('stat-sites-count').textContent = sites.length;
+        
+        const el = document.getElementById('sites-list');
+        if (!sites.length) {
+          el.innerHTML = '<div class="empty-state">No sites geofenced yet. Click on the map to define one!</div>';
+          if (sitesLayerGroup) sitesLayerGroup.clearLayers();
+          if (sitesCircleGroup) sitesCircleGroup.clearLayers();
+          return;
+        }
+
+        // Load into cards list
+        el.innerHTML = sites.map(s => `
+          <div class="entity-card" id="site-card-${s.id}" onclick="focusOnSite('${s.id}', ${s.latitude}, ${s.longitude}, ${s.radius_meters})">
+            <div class="entity-details">
+              <div class="entity-title">${s.name}</div>
+              <div class="entity-subtitle">${s.address || 'No address registered'}</div>
+              <div class="entity-meta">
+                <span class="badge badge-member">${s.member_count} assigned</span>
+                <span>Radius: ${s.radius_meters}m</span>
+              </div>
+            </div>
+            <div class="entity-actions" onclick="event.stopPropagation()">
+              <button class="btn btn-secondary btn-sm" onclick="openSiteDetail('${s.id}')" style="padding:6px">Manage</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteSite('${s.id}')" style="padding:6px; background:#fca5a5; color:#991b1b">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            </div>
+          </div>
+        `).join('');
+
+        // Map Setup if initialized
+        if (sitesMap) {
+          sitesLayerGroup.clearLayers();
+          sitesCircleGroup.clearLayers();
+          
+          sites.forEach(s => {
+            if (s.latitude && s.longitude) {
+              // Add Circle Geofence Range
+              L.circle([s.latitude, s.longitude], {
+                radius: s.radius_meters,
+                color: '#6366f1',
+                fillColor: '#6366f1',
+                fillOpacity: 0.15,
+                weight: 1.5
+              }).addTo(sitesCircleGroup);
+
+              // Add Marker
+              const m = L.marker([s.latitude, s.longitude])
+                .addTo(sitesLayerGroup)
+                .bindPopup(`<b>${s.name}</b><br>${s.address || 'No address'}<br>Radius: ${s.radius_meters}m`);
+                
+              m.on('click', () => {
+                document.querySelectorAll('.entity-card').forEach(c => c.classList.remove('selected'));
+                const card = document.getElementById(`site-card-${s.id}`);
+                if (card) {
+                  card.classList.add('selected');
+                  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+              });
+            }
+          });
+        }
+      } catch (err) {
+        toast('Failed to load sites', 'error');
+      }
+    }
+
+    function focusOnSite(id, lat, lng, radius) {
+      document.querySelectorAll('.entity-card').forEach(c => c.classList.remove('selected'));
+      document.getElementById(`site-card-${id}`).classList.add('selected');
+      
+      if (sitesMap && lat && lng) {
+        sitesMap.setView([lat, lng], 16);
+      }
+    }
+
+    async function createSite() {
+      const name = document.getElementById('site-name').value.trim();
+      const address = document.getElementById('site-address').value.trim();
+      const lat = parseFloat(document.getElementById('site-lat').value);
+      const lng = parseFloat(document.getElementById('site-lng').value);
+      const radius = parseInt(document.getElementById('site-radius').value);
+
+      if (!name) return toast('Site name is required', 'error');
+      if (isNaN(lat) || isNaN(lng)) return toast('Please select site coordinates on the map', 'error');
+
+      const body = {
+        name,
+        address: address || null,
+        latitude: lat,
+        longitude: lng,
+        radius_meters: radius || 30
+      };
+
+      try {
+        const res = await fetch(API + '/api/sites', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(body)
+        });
+        
+        if (!res.ok) throw new Error();
+        
+        toast('Site geofenced successfully!');
+        
+        // Reset fields
+        document.getElementById('site-name').value = '';
+        document.getElementById('site-address').value = '';
+        document.getElementById('site-lat').value = '';
+        document.getElementById('site-lng').value = '';
+        document.getElementById('site-radius').value = 30;
+        document.getElementById('radius-val').textContent = 30;
+
+        if (customDraggableMarker) {
+          sitesMap.removeLayer(customDraggableMarker);
+          customDraggableMarker = null;
+        }
+        if (currentFormCircle) {
+          sitesMap.removeLayer(currentFormCircle);
+          currentFormCircle = null;
+        }
+
+        loadSites();
+      } catch (err) {
+        toast('Failed to save site', 'error');
+      }
+    }
+
+    async function deleteSite(id) {
+      if (!confirm('Are you sure you want to delete this geotagged site?')) return;
+      try {
+        await fetch(API + '/api/sites/' + id, { method: 'DELETE' });
+        toast('Site deleted');
+        loadSites();
+        closeSiteDetail();
+      } catch (err) {
+        toast('Failed to delete site', 'error');
+      }
+    }
+
+    // ─── API: DRAWER / TEAM MANAGEMENT ───
+    async function openSiteDetail(siteId) {
+      try {
+        const [siteRes, membersRes, availRes] = await Promise.all([
+          fetch(API + '/api/sites/' + siteId),
+          fetch(API + '/api/sites/' + siteId + '/members'),
+          fetch(API + '/api/sites/' + siteId + '/available-members'),
+        ]);
+        
+        const site = await siteRes.json();
+        const members = await membersRes.json();
+        const available = await availRes.json();
+
+        const el = document.getElementById('site-detail-content');
+        el.innerHTML = `
+          <div style="background:var(--primary-light); padding:16px; border-radius:var(--radius-md); margin-bottom:14px; border:1px solid var(--primary)">
+            <h3 style="margin-bottom:4px; font-size:16px; color:var(--text-main)">${site.name}</h3>
+            <p style="color:var(--text-muted); font-size:12px">${site.address || 'No address'}</p>
+            <div style="display:flex; gap:16px; font-size:11px; color:var(--text-muted); margin-top:8px">
+              <span>Lat: ${site.latitude.toFixed(5)}</span>
+              <span>Lng: ${site.longitude.toFixed(5)}</span>
+              <span>Radius: ${site.radius_meters}m</span>
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px">
+            <h4 style="margin-bottom:10px; font-size:13px; text-transform:uppercase; color:var(--text-muted); letter-spacing:0.5px">
+              Assigned Team Members (${members.length})
+            </h4>
+            <div style="display:flex; flex-wrap:wrap; gap:4px">
+              ${members.length === 0 
+                ? '<p style="color:var(--text-muted); font-size:12.5px; padding:8px 0">No members assigned to this geofence yet.</p>' 
+                : members.map(m => `
+                  <div class="member-chip">
+                    <span>${m.user_name || m.user_id}</span>
+                    <button onclick="removeMember('${siteId}','${m.user_id}')" title="Remove Member">&times;</button>
+                  </div>
+                `).join('')}
+            </div>
+          </div>
+
+          <div>
+            <h4 style="margin-bottom:10px; font-size:13px; text-transform:uppercase; color:var(--text-muted); letter-spacing:0.5px">
+              Assign Team Member
+            </h4>
+            ${available.length === 0 
+              ? '<p style="color:var(--text-muted); font-size:12.5px">All registered members are already assigned to this site.</p>' 
+              : `
+                <div class="form-group" style="margin-bottom:10px">
+                  <div class="input-wrapper">
+                    <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    <select id="assign-select" style="padding-left:38px">
+                      ${available.map(u => `<option value="${u.id}">${u.name} (${u.role})</option>`).join('')}
+                    </select>
+                  </div>
+                </div>
+                <button class="btn btn-primary" onclick="assignMember('${siteId}')">Add Member to Site</button>
+              `}
+          </div>
+        `;
+        
+        // Open slide drawer
+        document.getElementById('drawerOverlay').classList.add('open');
+        document.getElementById('site-detail').classList.add('open');
+      } catch (err) {
+        toast('Failed to load site details', 'error');
+      }
+    }
+
+    function closeSiteDetail() {
+      document.getElementById('drawerOverlay').classList.remove('open');
+      document.getElementById('site-detail').classList.remove('open');
+    }
+
+    async function assignMember(siteId) {
+      const userId = document.getElementById('assign-select').value;
+      try {
+        const res = await fetch(API + '/api/sites/' + siteId + '/members', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ user_id: userId })
+        });
+        if (!res.ok) throw new Error();
+        toast('Member assigned successfully');
+        openSiteDetail(siteId);
+        loadSites();
+      } catch (err) {
+        toast('Failed to assign member', 'error');
+      }
+    }
+
+    async function removeMember(siteId, userId) {
+      try {
+        await fetch(API + '/api/sites/' + siteId + '/members/' + userId, { method: 'DELETE' });
+        toast('Member removed');
+        openSiteDetail(siteId);
+        loadSites();
+      } catch (err) {
+        toast('Failed to remove member', 'error');
+      }
+    }
+
+    // ─── API: USERS/MEMBERS ───
+    async function loadUsers() {
+      try {
+        const res = await fetch(API + '/api/users');
+        const users = await res.json();
+        
+        // Update stats
+        document.getElementById('stat-users-count').textContent = users.length;
+        
+        const el = document.getElementById('users-list');
+        if (!users.length) {
+          el.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No team members registered yet. Fill the form above!</div>';
+          return;
+        }
+
+        el.innerHTML = users.map(u => `
+          <div class="entity-card">
+            <div class="entity-details">
+              <div style="display:flex; align-items:center; gap:8px">
+                <div class="entity-title">${u.name}</div>
+                <span class="badge badge-${u.role}">${u.role}</span>
+              </div>
+              <div class="entity-subtitle" style="margin-top:4px">${u.email}</div>
+              ${u.phone ? `<div class="entity-meta"><span>Phone: ${u.phone}</span></div>` : ''}
+            </div>
+            <div class="entity-actions">
+              <button class="btn btn-danger btn-sm" onclick="deleteUser('${u.id}')" style="padding:6px; background:#fca5a5; color:#991b1b">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        toast('Failed to load users', 'error');
+      }
+    }
+
+    async function createUser() {
+      const name = document.getElementById('user-name').value.trim();
+      const email = document.getElementById('user-email').value.trim();
+      const phone = document.getElementById('user-phone').value.trim();
+      const role = document.getElementById('user-role').value;
+
+      if (!name || !email) return toast('Name and email are required', 'error');
+
+      const body = {
+        name,
+        email,
+        phone: phone || null,
+        role
+      };
+
+      try {
+        const res = await fetch(API + '/api/users', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(body)
+        });
+        
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || 'Failed to create user');
+        }
+        
+        toast('Member registered successfully!');
+        document.getElementById('user-name').value = '';
+        document.getElementById('user-email').value = '';
+        document.getElementById('user-phone').value = '';
+        loadUsers();
+      } catch (err) {
+        toast(err.message || 'Failed to register member', 'error');
+      }
+    }
+
+    async function deleteUser(id) {
+      if (!confirm('Are you sure you want to delete this team member?')) return;
+      try {
+        await fetch(API + '/api/users/' + id, { method: 'DELETE' });
+        toast('Member deleted');
+        loadUsers();
+      } catch (err) {
+        toast('Failed to delete member', 'error');
+      }
+    }
+
+    // ─── API: SIMULATOR / CHECK-IN ───
+    async function loadSitesDropdown() {
+      try {
+        const res = await fetch(API + '/api/sites');
+        const sites = await res.json();
+        globalSites = sites;
+
+        const sel = document.getElementById('checkin-site');
+        if (sites.length === 0) {
+          sel.innerHTML = '<option value="">No sites available</option>';
+          return;
+        }
+
+        sel.innerHTML = sites.map(s => `<option value="${s.id}">${s.name} (Radius: ${s.radius_meters}m)</option>`).join('');
+        updateCheckinSiteHighlight();
+      } catch (err) {
+        toast('Failed to load sites dropdown', 'error');
+      }
+    }
+
+    function updateCheckinSiteHighlight() {
+      const siteId = document.getElementById('checkin-site').value;
+      const site = globalSites.find(s => s.id === siteId);
+
+      if (!site || !checkinMap) return;
+
+      // Update Map elements
+      if (checkinSiteCircle) checkinMap.removeLayer(checkinSiteCircle);
+      if (checkinSiteMarker) checkinMap.removeLayer(checkinSiteMarker);
+
+      checkinSiteCircle = L.circle([site.latitude, site.longitude], {
+        radius: site.radius_meters,
+        color: '#6366f1',
+        fillColor: '#6366f1',
+        fillOpacity: 0.15
+      }).addTo(checkinMap);
+
+      checkinSiteMarker = L.marker([site.latitude, site.longitude], {
+        icon: L.divIcon({
+          className: 'custom-site-pin',
+          html: `<div style="background:var(--primary); width:14px; height:14px; border-radius:50%; border:3px solid white; box-shadow:0 0 8px rgba(0,0,0,0.4)"></div>`,
+          iconSize: [14, 14],
+          iconAnchor: [7, 7]
+        })
+      }).addTo(checkinMap);
+
+      // Fit map to show both site and simulated user
+      const bounds = L.latLngBounds([site.latitude, site.longitude]);
+      
+      const userLat = parseFloat(document.getElementById('checkin-lat').value);
+      const userLng = parseFloat(document.getElementById('checkin-lng').value);
+      
+      if (!isNaN(userLat) && !isNaN(userLng)) {
+        bounds.extend([userLat, userLng]);
+        checkinMap.fitBounds(bounds, { padding: [50, 50] });
+      } else {
+        // Position user marker nearby if not set
+        const shiftLat = site.latitude + (Math.random() - 0.5) * 0.003;
+        const shiftLng = site.longitude + (Math.random() - 0.5) * 0.003;
+        setCheckinCoordinates(shiftLat, shiftLng);
+        checkinMap.setView([site.latitude, site.longitude], 16);
+      }
+    }
+
+    async function doCheckin() {
+      const siteId = document.getElementById('checkin-site').value;
+      const lat = parseFloat(document.getElementById('checkin-lat').value);
+      const lng = parseFloat(document.getElementById('checkin-lng').value);
+
+      if (!siteId || isNaN(lat) || isNaN(lng)) return toast('Please select site and pin location', 'error');
+
+      const resultBox = document.getElementById('checkin-result');
+      // Show radar ping loader
+      resultBox.innerHTML = `
+        <div class="card-panel" style="text-align:center; padding:30px">
+          <div class="radar-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+          </div>
+          <p style="color:var(--text-muted); font-size:13px">Broadcasting GPS coordinates to server...</p>
+        </div>
+      `;
+
+      try {
+        const res = await fetch(API + `/api/sites/${siteId}/check-in`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ user_id: 'manual_simulator', latitude: lat, longitude: lng })
+        });
+        
+        if (!res.ok) throw new Error();
+        
+        const data = await res.json();
+        
+        // Render beautiful success or failure card
+        setTimeout(() => {
+          if (data.within_radius) {
+            resultBox.innerHTML = `
+              <div class="checkin-response-box success">
+                <div class="checkin-icon">✓</div>
+                <h3 style="font-size:16px; margin-bottom:4px">Check-In Approved</h3>
+                <p style="font-size:13px; opacity:0.9">${data.message}</p>
+                <div style="font-size:11px; opacity:0.75; margin-top:8px">
+                  Distance: <b>${data.distance_meters.toFixed(1)}m</b> from site center
+                </div>
+              </div>
+            `;
+            toast('Attendance recorded successfully!');
+          } else {
+            resultBox.innerHTML = `
+              <div class="checkin-response-box fail">
+                <div class="checkin-icon">✗</div>
+                <h3 style="font-size:16px; margin-bottom:4px">Check-In Denied</h3>
+                <p style="font-size:13px; opacity:0.9">Out of bounds: ${data.message}</p>
+                <div style="font-size:11px; opacity:0.75; margin-top:8px">
+                  Distance: <b>${data.distance_meters.toFixed(1)}m</b> (Allowed geofence: ${globalSites.find(s => s.id === siteId)?.radius_meters}m)
+                </div>
+              </div>
+            `;
+            toast('Geofence boundary breach: Check-in denied', 'error');
+          }
+        }, 800); // 800ms artificial delay for radar effect styling
+        
+      } catch (err) {
+        resultBox.innerHTML = '';
+        toast('Failed to record check-in', 'error');
+      }
+    }
+
+    // ─── Start up ───
+    initTheme();
+    loadSites();
+  </script>
 </body>
 </html>
